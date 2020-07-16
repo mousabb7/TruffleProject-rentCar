@@ -125,10 +125,7 @@ contract Adoption {
         rentalPrice = _pricePerDay / 24 / 3600;
     }
 
-//    function setRentalPricePerSecond(uint _pricePerSecond) public onlyOwner whenNotRented{
-  //      require(_pricePerSecond > 0);
-    //    rentalPrice = _pricePerSecond;
-    //}
+
 
     // rents the car for any given time depending money sent and price of car
     function rent() public payable ifAvailable whenNotRented{
