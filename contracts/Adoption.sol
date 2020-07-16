@@ -16,9 +16,9 @@ pragma solidity ^0.5.0;
 contract Adoption {
 
 
-    // The owner of this object
+    // The owner of this car
     address public owner;
-     // The account currently renting the object
+     // The account currently renting the car
     address public renter;
 
     // The date when the latest rental started
@@ -26,14 +26,14 @@ contract Adoption {
     // The date when the latest rental is supposed to end
     uint public returnDate;
 
-    // Whether or not the object is currently rented
+    // Whether or not the car is currently rented
     bool public rented;
 
     // The price per second of the rental (in wei)
     uint public rentalPrice;
 
     //Can not be rented for less time than this.
-    //If renter tries to return the object earlier than this time, minimum will be charged anyways
+    //If renter tries to return the car earlier than this time, minimum will be charged anyways
     uint public minRentalTime;
     uint constant MIN_RENTAL_TIME = 60;
 
@@ -41,7 +41,7 @@ contract Adoption {
     uint public maxRentalTime;
     uint constant MAX_RENTAL_TIME = 3600 * 24 * 365;
 
-    // Whether or not the object can be rented. (Owner can take it off to prevent rental)
+    // Whether or not the car can be rented. (Owner can take it off to prevent rental)
     // If its currently rented, making it unavailable doesn't stop it from being used
     bool public available;
 
@@ -56,31 +56,31 @@ contract Adoption {
     // MODIFIERS
     //
 
-    /// @dev allows only the owner to call functions with this modifier
+    /// allows only the owner to call functions with this modifier
     modifier onlyOwner() {
         require(msg.sender == owner);
         _;
     }
 
-    /// @dev allows only the current renter to call functions with this modifier
+    /// allows only the current renter to call functions with this modifier
     modifier onlyRenter() {
         require(msg.sender == renter);
         _;
     }
 
-    /// @dev allows functions with this modifier to be called only when NOT rented
+    /// allows functions with this modifier to be called only when NOT rented
     modifier whenNotRented() {
         require(!rented || now > returnDate);
         _;
     }
 
-    /// @dev allows functions with this modifier to be called only when rented
+    /// allows functions with this modifier to be called only when rented
     modifier whenRented() {
         require(rented && now <= returnDate);
         _;
     }
 
-    /// @dev allows functions with this modifier to be called only when object is available
+    /// allows functions with this modifier to be called only when car is available
     modifier ifAvailable() {
         require(available);
         _;
@@ -97,7 +97,7 @@ contract Adoption {
     // param _minRentalTime the minimum time the object has to be rented for
     // param _maxRentalTime the maximum time the object has to be rented for
     function rentableSetup(uint _pricePerHour, uint _minRentalTime, uint _maxRentalTime) public onlyOwner {
-        require(!available); // Take object down before trying to update
+        require(!available); // Take car down before trying to update
         require(_minRentalTime >= MIN_RENTAL_TIME &&
                 _maxRentalTime <= MAX_RENTAL_TIME &&
                 _minRentalTime < _maxRentalTime);
@@ -110,7 +110,7 @@ contract Adoption {
 
     }
 
-    // owner can make the object available/unavailable for rental
+    // owner can make the car available/unavailable for rental
     function setAvailable(bool _available) public onlyOwner {
         available = _available;
     }
@@ -125,12 +125,12 @@ contract Adoption {
         rentalPrice = _pricePerDay / 24 / 3600;
     }
 
-    function setRentalPricePerSecond(uint _pricePerSecond) public onlyOwner whenNotRented{
-        require(_pricePerSecond > 0);
-        rentalPrice = _pricePerSecond;
-    }
+//    function setRentalPricePerSecond(uint _pricePerSecond) public onlyOwner whenNotRented{
+  //      require(_pricePerSecond > 0);
+    //    rentalPrice = _pricePerSecond;
+    //}
 
-    // rents the object for any given time depending money sent and price of car
+    // rents the car for any given time depending money sent and price of car
     function rent() public payable ifAvailable whenNotRented{
         require (msg.value > 0);
         require (rentalPrice > 0);              // Make sure the rental price was set

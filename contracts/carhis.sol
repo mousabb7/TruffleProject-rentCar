@@ -47,7 +47,7 @@ contract CarContract {
    
     function getAllIndexes(uint64 vin_) public view returns (uint8 ownerIndex, uint8 airbagIndex_,
                                                              uint8 engineIndex_, uint8 tiresIndex) {
-        var currentCar = automobiles[vin_];
+        CarStruct storage currentCar = automobiles[vin_];
         return (currentCar.counterOwner, currentCar.counterAirbag, currentCar.counterEngine, currentCar.counterTires);
     }
 
@@ -57,8 +57,8 @@ contract CarContract {
  
     function getAirbag(uint64 vin_, uint8 arrayIndex_) public view returns (string memory _part, uint _timeInstalled,
                                                                 uint _carMileage, string memory _whoInstalledPart) {
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         return (currentCar.airbag[arrayIndex_].part,
                 currentCar.airbag[arrayIndex_].timeInstalled,
@@ -68,8 +68,8 @@ contract CarContract {
     
     function getEngine(uint64 vin_, uint8 arrayIndex_) public view returns (string memory _part, uint _timeInstalled,
                                                                 uint _carMileage, string memory _whoInstalledPart) {
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         return (currentCar.engine[arrayIndex_].part,
                 currentCar.engine[arrayIndex_].timeInstalled,
@@ -79,8 +79,8 @@ contract CarContract {
 
     function getTires(uint64 vin_, uint8 arrayIndex_) public view returns (string memory _part, uint _timeInstalled,
                                                                 uint _carMileage, string memory _whoInstalledPart) {
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         return (currentCar.tires[arrayIndex_].part,
                 currentCar.tires[arrayIndex_].timeInstalled,
@@ -89,8 +89,8 @@ contract CarContract {
     }
 
     function getOwner(uint64 vin_, uint8 arrayIndex_) public view returns (address _ownerAddress, uint _timeBought, uint _carMileage) {
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         return (currentCar.ownerHistory[arrayIndex_].ownerAddress,
                 currentCar.ownerHistory[arrayIndex_].timeBought,
@@ -100,8 +100,8 @@ contract CarContract {
     function changeOwner(uint64 vin_, address newOwner, uint currentMileage) public {
         // Current owner is only one that can make a part change
         // assert verifies current owner is the person making the part change request
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         currentCar.counterOwner++;
 	counterOwner_ = currentCar.counterOwner;
@@ -113,14 +113,14 @@ contract CarContract {
     function changeAirbag (uint64 vin_, string memory newAirbag, uint currentMileage, string memory newMechanic) public {
         // Current owner is only one that can make a part change
         // assert verifies current owner is the person making the part change request
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         if (bytes(currentCar.airbag[0].part).length > 0) {
             // If first airbag has been logged, move to next spot in array
             currentCar.counterAirbag++;
         }
-	var counterAirbag_ = currentCar.counterAirbag;
+	uint8 counterAirbag_ = currentCar.counterAirbag;
         currentCar.airbag[counterAirbag_].part = newAirbag;
         currentCar.airbag[counterAirbag_].timeInstalled = now;
         currentCar.airbag[counterAirbag_].carMileage = currentMileage;
@@ -130,14 +130,14 @@ contract CarContract {
     function changeEngine (uint64 vin_, string memory newEngine, uint currentMileage, string memory newMechanic) public {
         // Current owner is only one that can make a part change
         // assert verifies current owner is the person making the part change request
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         if (bytes(currentCar.engine[0].part).length > 0) {
             // If first engine has been logged, move to next spot in array
             currentCar.counterEngine++;
         }
-	var counterEngine_ = currentCar.counterEngine;
+	uint8 counterEngine_ = currentCar.counterEngine;
         currentCar.engine[counterEngine_].part = newEngine;
         currentCar.engine[counterEngine_].timeInstalled = now;
         currentCar.engine[counterEngine_].carMileage = currentMileage;
@@ -147,14 +147,14 @@ contract CarContract {
     function changeTires (uint64 vin_, string memory newTires, uint currentMileage, string memory newMechanic) public {
         // Current owner is only one that can make a part change
         // assert verifies current owner is the person making the part change request
-        var currentCar = automobiles[vin_];
-	var counterOwner_ = currentCar.counterOwner;
+        CarStruct storage currentCar = automobiles[vin_];
+	uint8 counterOwner_ = currentCar.counterOwner;
         assert(msg.sender == currentCar.ownerHistory[counterOwner_].ownerAddress);
         if (bytes(currentCar.tires[0].part).length > 0) {
             // If first set of tires have been logged, move to next spot in array
             currentCar.counterTires++;
         }
-	var counterTires_ = currentCar.counterTires;
+	uint8 counterTires_ = currentCar.counterTires;
         currentCar.tires[counterTires_].part = newTires;
         currentCar.tires[counterTires_].timeInstalled = now;
         currentCar.tires[counterTires_].carMileage = currentMileage;
