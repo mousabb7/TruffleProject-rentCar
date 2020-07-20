@@ -1,5 +1,7 @@
 pragma solidity ^0.5.0;
 import "./Adoption.sol";
+import "./carhis.sol";
+
 contract Car is Adoption {
 
     string public Type;
