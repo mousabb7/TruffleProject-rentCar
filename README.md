@@ -27,7 +27,8 @@ Before the car set as Rentable can be used, there's a few steps that have to be 
 1- Deploy the contract inheriting from Rentable.
 
 2- Make the car available. As default, the car won't be avalaible for rental. First, you have to define it's price per hour, minimum and maximum rental time by calling            rentableSetup(uint _pricePerHour, uint _minRentalTime, uint _maxRentalTime). Once you call this function, the car will be available for rental.
-3- While the car is not rented, you can modify its rental price. There's 2 functions to do so: setRentalPricePerDay(), setRentalPricePerHour(). Use the one that makes more        sense to you depending the use case. All 2 of them do the same, they set how much wei per second the rental costs.
+3- While the car is not rented, you can modify its rental price. There's 2 functions to do so: setRentalPricePerDay(), setRentalPricePerHour(). Use the one that makes more
+   sense to you depending the use case. All 2 of them do the same, they set how much wei per second the rental costs.
 ## How to interact with a Rentable contract ##
 Once your Rentable car has been set up, any account can rent it by calling the rent() function or just by sending ether to the contract (and supplying enough gas).
 
